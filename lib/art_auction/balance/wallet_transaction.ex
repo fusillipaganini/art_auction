@@ -5,6 +5,7 @@ defmodule ArtAuction.Balance.WalletTransaction do
 
   @operations [
     donation_to_charity: 1,
+    # REVIEW: Should this point to the bid or to the lot ?
     winning_bid: 2,
     cheering_bit: 3,
     subbed: 4,
