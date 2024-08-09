@@ -6,15 +6,17 @@ defmodule ArtAuction.Auction.Exhibition do
           id: id,
           name: String.t(),
           status: :draft | :open | :finished,
+          description: String.t(),
           starts_at: DateTime.t() | nil,
           private: boolean(),
           inserted_at: DateTime.t(),
           updated_at: DateTime.t()
         }
 
-  schema "auction_exhibition" do
+  schema "auction_exhibitions" do
     field :name, :string
     field :status, Ecto.Enum, values: [draft: 1, open: 2, finished: 3]
+    field :description, :string
 
     field :starts_at, :utc_datetime
 

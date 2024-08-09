@@ -11,7 +11,7 @@ defmodule ArtAuction.Migrations.AddWalletAndWalletTransactionTable do
       timestamps(type: :utc_datetime)
     end
 
-    create index("account_wallets", [:account_id])
+    create index("account_wallets", [:account_id], include: [:id])
 
     create table("account_wallet_transactions") do
       add :amount, :decimal, null: false
