@@ -39,7 +39,7 @@ defmodule ArtAuction.User.TwitchAccessToken do
     field :validate_at, :utc_datetime
     field :status, Ecto.Enum, values: [new: 1, valid: 2, expired: 3], default: :new
 
-    belongs_to Account, :account
+    belongs_to :account, Account
 
     timestamps(type: :utc_datetime)
   end

@@ -18,7 +18,7 @@ defmodule ArtAuction.User.Account do
     field :display_name, :string
     field :anonymize, :boolean, default: false
 
-    has_many TwitchAccessToken, :twitch_access_tokens
+    has_many :twitch_access_tokens, TwitchAccessToken
 
     timestamps(type: :utc_datetime)
   end

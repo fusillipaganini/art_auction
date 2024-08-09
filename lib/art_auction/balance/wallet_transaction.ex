@@ -1,11 +1,20 @@
 defmodule ArtAuction.Balance.WalletTransaction do
   use Ecto.Schema
 
-  alias ArtAuction.User.Wallet
+  alias ArtAuction.Balance.Wallet
+
+  @type id :: pos_integer()
+  @type t :: %__MODULE__{
+          id: id,
+          amount: Decimal.t(),
+          operation: :donation_to_charity | :winning_bid | :cheering_bit | :subbed | :manual,
+          wallet_id: Wallet.id(),
+          wallet: Ecto.Schema.belongs_to(Wallet.t()),
+          inserted_at: DateTime.t()
+        }
 
   @operations [
     donation_to_charity: 1,
-    # REVIEW: Should this point to the bid or to the lot ?
     winning_bid: 2,
     cheering_bit: 3,
     subbed: 4,
@@ -13,11 +22,11 @@ defmodule ArtAuction.Balance.WalletTransaction do
   ]
 
   schema "account_wallet_transactions" do
-    belongs_to Wallet, :wallet
-
     # NOTE: amount value can be negative
     field :amount, :decimal
-    field :operation, Ecto.Enum, value: @operations
+    field :operation, Ecto.Enum, values: @operations
+
+    belongs_to :wallet, Wallet
 
     timestamps(type: :utc_datetime, on_update: false)
   end
