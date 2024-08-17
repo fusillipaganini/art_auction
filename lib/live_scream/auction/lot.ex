@@ -10,7 +10,7 @@ defmodule LiveScream.Auction.Lot do
           number: non_neg_integer(),
           name: String.t(),
           description: String.t(),
-          status: :standby | :available | :commiting | :finished,
+          status: :standby | :active | :commiting | :finished | :cancelled,
           starting_bid: Decimal.t(),
           increment: Decimal.t(),
           exhibition_id: Exhibition.id(),
@@ -28,8 +28,13 @@ defmodule LiveScream.Auction.Lot do
     # TODO: bind several donors
     # TODO: photos
 
+    # Standby - When a lot is available and will eventually be put for bids on an exhibition
+    # Active - A temporary status for when a lot is being bid on an active exhibition
+    # Commiting - The bids have just finished and now the auction manager is waiting for the winning bidder to pay
+    # Finished - When the lot was won by someone and that someone has properly paid
+    # Cancelled - When for some reason the lot is cancelled (eg: no bids)
     field :status, Ecto.Enum,
-      values: [standby: 1, available: 2, commiting: 3, finished: 4],
+      values: [standby: 1, active: 2, commiting: 3, finished: 4, cancelled: 5],
       default: :standby
 
     field :starting_bid, :decimal, default: Decimal.new(0)
