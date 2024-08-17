@@ -11,7 +11,6 @@ defmodule LiveScream.User.TwitchAccessToken do
           refresh_token: String.t() | nil,
           expires_at: DateTime.t(),
           validate_at: DateTime.t() | nil,
-          status: :new | :valid | :expired,
           twitch_user_id: TwitchAccount.id(),
           twitch_account: Ecto.Schema.belongs_to(TwitchAccount.t()),
           inserted_at: DateTime.t(),
@@ -25,7 +24,6 @@ defmodule LiveScream.User.TwitchAccessToken do
 
     field :expires_at, :utc_datetime
     field :validate_at, :utc_datetime
-    field :status, Ecto.Enum, values: [new: 1, valid: 2, expired: 3], default: :new
 
     belongs_to :twitch_account, TwitchAccount,
       foreign_key: :twitch_user_id,
@@ -46,23 +44,17 @@ defmodule LiveScream.User.TwitchAccessToken do
   @spec validation_action(t) :: :expire | :refresh | :validate | :pass
   def validation_action(access_token = %__MODULE__{}) do
     now = DateTime.utc_now()
+    validate_at = access_token.validate_at
     expired? = DateTime.after?(now, access_token.expires_at)
 
-    revalidate? =
-      is_nil(access_token.validate_at) || DateTime.after?(now, access_token.validate_at)
+    revalidate? = is_nil(validate_at) || DateTime.after?(now, validate_at)
 
     cond do
-      access_token.status == :expired ->
-        :expire
-
       expired? and is_nil(access_token.refresh_token) ->
         :expire
 
       expired? ->
         :refresh
-
-      access_token.status == :new ->
-        :validate
 
       revalidate? ->
         :validate
@@ -72,15 +64,9 @@ defmodule LiveScream.User.TwitchAccessToken do
     end
   end
 
-  @spec mark_expired(t | changeset) :: changeset
-  def mark_expired(access_token) do
-    Changeset.change(access_token, %{status: :expired, validate_at: nil})
-  end
-
   @spec mark_validated(t | changeset) :: changeset
   def mark_validated(access_token) do
     Changeset.change(access_token, %{
-      status: :valid,
       validate_at: DateTime.add(DateTime.utc_now(), 1, :hour)
     })
   end
