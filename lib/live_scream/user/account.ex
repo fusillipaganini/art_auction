@@ -1,6 +1,7 @@
 defmodule LiveScream.User.Account do
   use Ecto.Schema
 
+  alias Ecto.Changeset
   alias LiveScream.User.TwitchAccount
 
   @type id :: pos_integer()
@@ -12,6 +13,7 @@ defmodule LiveScream.User.Account do
           inserted_at: DateTime.t(),
           updated_at: DateTime.t()
         }
+  @type changeset :: Ecto.Changeset.t(%__MODULE__{})
 
   schema "accounts" do
     field :display_name, :string
@@ -20,5 +22,12 @@ defmodule LiveScream.User.Account do
     has_one :twitch_account, TwitchAccount
 
     timestamps(type: :utc_datetime)
+  end
+
+  @spec changeset(%__MODULE__{} | changeset, map()) :: changeset
+  def changeset(data, params) do
+    data
+    |> Changeset.cast(params, [:display_name, :anonymize])
+    |> Changeset.validate_required([:display_name, :anonymize])
   end
 end
