@@ -1,4 +1,4 @@
-defmodule ArtAuction.Migrations.AddAccountsTable do
+defmodule LiveScream.Migrations.AddAccountsTable do
   use Ecto.Migration
 
   def change do

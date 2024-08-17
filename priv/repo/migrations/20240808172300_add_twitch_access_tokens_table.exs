@@ -1,4 +1,4 @@
-defmodule ArtAuction.Migrations.AddTwitchAccessTokensTable do
+defmodule LiveScream.Migrations.AddTwitchAccessTokensTable do
   use Ecto.Migration
 
   def change do

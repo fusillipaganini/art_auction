@@ -1,4 +1,4 @@
-defmodule ArtAuction.Migrations.AddWalletAndWalletTransactionTable do
+defmodule LiveScream.Migrations.AddWalletAndWalletTransactionTable do
   use Ecto.Migration
 
   def change do
