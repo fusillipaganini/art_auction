@@ -2,6 +2,7 @@ defmodule LiveScream.User.Account do
   use Ecto.Schema
 
   alias Ecto.Changeset
+  alias LiveScream.Balance.Wallet
   alias LiveScream.User.TwitchAccount
 
   @type id :: pos_integer()
@@ -10,6 +11,7 @@ defmodule LiveScream.User.Account do
           display_name: String.t(),
           anonymize: boolean(),
           twitch_account: Ecto.Schema.has_one(TwitchAccount.t()),
+          wallets: Ecto.Schema.has_many(Wallet.t()),
           inserted_at: DateTime.t(),
           updated_at: DateTime.t()
         }
@@ -20,6 +22,9 @@ defmodule LiveScream.User.Account do
     field :anonymize, :boolean, default: false
 
     has_one :twitch_account, TwitchAccount
+    # NOTE: there is support for multiple wallets for a given user account but this won't be used
+    #   until different currencies are supported
+    has_many :wallets, Wallet
 
     timestamps(type: :utc_datetime)
   end
