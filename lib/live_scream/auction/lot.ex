@@ -37,7 +37,7 @@ defmodule LiveScream.Auction.Lot do
       values: [standby: 1, active: 2, commiting: 3, finished: 4, cancelled: 5],
       default: :standby
 
-    field :starting_bid, :decimal, default: Decimal.new(0)
+    field :starting_bid, :decimal, default: Decimal.new(1)
     field :increment, :decimal, default: Decimal.new(1)
 
     belongs_to :exhibition, Exhibition
